@@ -19,12 +19,12 @@ namespace ConstrutoraDesbravador.Data.Repository
 
         public virtual async Task<TEntity> ObterPorId(int id)
         {
-            return await DbSet.FindAsync(id);
+            return await DbSet.AsNoTracking().Where(x => x.Id == id).FirstAsync();
         }
 
         public virtual async Task<List<TEntity>> ObterTodos()
         {
-            return await DbSet.ToListAsync();
+            return await DbSet.AsNoTracking().ToListAsync();
         }
 
         public async Task<IEnumerable<TEntity>> Buscar(Expression<Func<TEntity, bool>> predicate)

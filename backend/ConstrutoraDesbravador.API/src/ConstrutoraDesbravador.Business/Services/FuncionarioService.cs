@@ -26,31 +26,24 @@ namespace ConstrutoraDesbravador.Business.Services
 
             if (!funcionarios.Any())
             {
-                var randomUsers = await _randomUserService.GetRandomUsersAsync();
-                funcionarios = _mapper.Map<List<Funcionario>>(randomUsers);
-                await AdicionarVarios(funcionarios);
+                await AdicionarAleatorios();
             }
 
             return funcionarios;
         }
 
-        public async Task Adicionar(Funcionario funcionario)
+        public async Task<IEnumerable<Funcionario>> AdicionarAleatorios()
         {
-            if (!ExecutarValidacao(new FuncionarioValidation(), funcionario)) return;
+            var randomUsers = await _randomUserService.GetRandomUsersAsync();
+            var funcionarios = _mapper.Map<List<Funcionario>>(randomUsers);
+            await AdicionarVarios(funcionarios);
 
-            await _funcionarioRepository.Adicionar(funcionario);
+            return funcionarios;
         }
         public async Task AdicionarVarios(IList<Funcionario> funcionarios)
         {
-            var funcionariosValidados = funcionarios.Where(x => ExecutarValidacao(new FuncionarioValidation(), x)).ToList();            
+            var funcionariosValidados = funcionarios.Where(x => ExecutarValidacao(new FuncionarioValidation(_funcionarioRepository), x)).ToList();            
             await _funcionarioRepository.AdicionarVarios(funcionariosValidados);
-        }
-
-        public async Task Atualizar(Funcionario funcionario)
-        {
-            if (!ExecutarValidacao(new FuncionarioValidation(), funcionario)) return;
-
-            await _funcionarioRepository.Atualizar(funcionario);
         }
 
         public async Task Remover(int id)
