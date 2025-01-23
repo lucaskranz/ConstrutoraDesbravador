@@ -59,5 +59,11 @@ namespace ConstrutoraDesbravador.Data.Repository
         {
             Db.Dispose();
         }
+
+        public async Task AdicionarVarios(List<TEntity> entity)
+        {
+            await DbSet.AddRangeAsync(entity);
+            await SaveChanges();
+        }
     }
 }

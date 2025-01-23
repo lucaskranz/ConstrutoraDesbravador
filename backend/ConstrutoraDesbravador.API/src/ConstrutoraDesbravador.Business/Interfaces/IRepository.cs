@@ -6,6 +6,7 @@ namespace ConstrutoraDesbravador.Business.Interfaces
     public interface IRepository<TEntity> : IDisposable where TEntity : Entity
     {
         Task Adicionar(TEntity entity);
+        Task AdicionarVarios(List<TEntity> entity);
         Task<TEntity> ObterPorId(int id);
         Task<List<TEntity>> ObterTodos();
         Task Atualizar(TEntity entity);
