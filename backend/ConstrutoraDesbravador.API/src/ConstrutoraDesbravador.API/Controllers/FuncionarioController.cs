@@ -8,7 +8,6 @@ using System.Net;
 
 namespace ConstrutoraDesbravador.API.Controllers
 {
-
     [Route("api/funcionarios")]
     public class FuncionarioController : BaseController
     {
@@ -22,15 +21,21 @@ namespace ConstrutoraDesbravador.API.Controllers
         }
 
         [HttpGet]
-        public async Task<IEnumerable<FuncionarioDTO>> ObterTodos()
+        public async Task<IEnumerable<FuncionarioProjetosDTO>> ObterTodos()
         {
-            return _mapper.Map<IEnumerable<FuncionarioDTO>>(await _funcionarioService.Obter());
+            return _mapper.Map<IEnumerable<FuncionarioProjetosDTO>>(await _funcionarioService.Obter());
+        }
+
+        [HttpGet("{id}")]
+        public async Task<FuncionarioProjetosDTO> ObterPorId(int id)
+        {
+            return _mapper.Map<FuncionarioProjetosDTO>(await _funcionarioService.ObterPorId(id));
         }
 
         [HttpPost("adicionar-aleatorios")]
-        public async Task<ActionResult<FuncionarioDTO>> AdicionarAleatorios()
+        public async Task<ActionResult<FuncionarioDTO>> AdicionarAleatorios(int quantidade = 5)
         {
-            var funcionariosAleatorios = _mapper.Map<IEnumerable<FuncionarioDTO>>(await _funcionarioService.AdicionarAleatorios());
+            var funcionariosAleatorios = _mapper.Map<IEnumerable<FuncionarioProjetosDTO>>(await _funcionarioService.AdicionarAleatorios(quantidade));
 
             return CustomResponse(HttpStatusCode.Created, funcionariosAleatorios);
         }

@@ -22,7 +22,7 @@ namespace ConstrutoraDesbravador.Business.Services
         }
         public async Task<IEnumerable<Funcionario>> Obter()
         {
-            var funcionarios = await _funcionarioRepository.ObterTodos();
+            var funcionarios = await _funcionarioRepository.ObterFuncionariosProjetos();
 
             if (!funcionarios.Any())
             {
@@ -32,9 +32,14 @@ namespace ConstrutoraDesbravador.Business.Services
             return funcionarios;
         }
 
-        public async Task<IEnumerable<Funcionario>> AdicionarAleatorios()
+        public async Task<Funcionario> ObterPorId(int id)
         {
-            var randomUsers = await _randomUserService.GetRandomUsersAsync();
+            return await _funcionarioRepository.ObterFuncionarioProjeto(id);
+        }
+
+        public async Task<IEnumerable<Funcionario>> AdicionarAleatorios(int quantidade = 5)
+        {
+            var randomUsers = await _randomUserService.GetRandomUsersAsync(quantidade);
             var funcionarios = _mapper.Map<List<Funcionario>>(randomUsers);
             await AdicionarVarios(funcionarios);
 
@@ -48,11 +53,23 @@ namespace ConstrutoraDesbravador.Business.Services
 
         public async Task Remover(int id)
         {
-            var funcionario = await _funcionarioRepository.ObterPorId(id);
+            var funcionario = await ObterPorId(id);
 
             if (funcionario == null)
             {
                 Notificar("Funcionario não existe!");
+                return;
+            }
+
+            if (funcionario.ProjetosResponsavel.Any())
+            {
+                Notificar("Funcionário é responsável por um projeto");
+                return;
+            }
+
+            if (funcionario.ProjetosVinculados.Any())
+            {
+                Notificar("Funcionário está vinculado a projetos");
                 return;
             }
 
@@ -62,7 +79,6 @@ namespace ConstrutoraDesbravador.Business.Services
         public void Dispose()
         {
             _funcionarioRepository?.Dispose();
-        }
-
+        }        
     }
 }

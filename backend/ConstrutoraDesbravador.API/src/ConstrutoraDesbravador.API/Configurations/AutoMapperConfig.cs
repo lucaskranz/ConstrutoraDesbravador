@@ -13,7 +13,16 @@ namespace ConstrutoraDesbravador.API.Configurations
                .ForMember(dest => dest.Sobrenome, opt => opt.MapFrom(src => src.Name.Last))
                .ForMember(dest => dest.Email, opt => opt.MapFrom(src => src.Email));
 
+            CreateMap<Funcionario, FuncionarioProjetosDTO>()
+                .ReverseMap();
+
             CreateMap<Funcionario, FuncionarioDTO>()
+                .ReverseMap();
+
+            CreateMap<Projeto, ProjetoDTO>()
+                .ReverseMap();
+
+            CreateMap<Projeto, ProjetoSemResponsavelDTO>()
                 .ReverseMap();
         }
     }

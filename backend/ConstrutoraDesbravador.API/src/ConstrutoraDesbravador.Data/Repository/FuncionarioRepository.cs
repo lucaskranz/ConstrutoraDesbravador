@@ -7,9 +7,7 @@ namespace ConstrutoraDesbravador.Data.Repository
 {
     public class FuncionarioRepository : Repository<Funcionario>, IFuncionarioRepository
     {
-        public FuncionarioRepository(ConstrutoraDesbravadorContext context) : base(context)
-        {
-        }
+        public FuncionarioRepository(ConstrutoraDesbravadorContext context) : base(context) { }
 
         public bool ExisteEmail(string email)
         {
@@ -18,6 +16,25 @@ namespace ConstrutoraDesbravador.Data.Repository
                 .Where(x => x.Email.ToLower() == email.ToLower());
                 
             return funcionarios.Any();
+        }
+
+        public async Task<IEnumerable<Funcionario>> ObterFuncionariosProjetos()
+        {
+            var funcionarios = Db.Funcionarios
+                .AsNoTracking()
+                .Include(x => x.ProjetosResponsavel)
+                .Include(x => x.ProjetosVinculados);
+
+            return await funcionarios.ToListAsync();
+        }
+
+        public async Task<Funcionario> ObterFuncionarioProjeto(int id)
+        {
+            return Db.Funcionarios
+                .AsNoTracking()
+                .Include(x => x.ProjetosResponsavel)
+                .Include(x => x.ProjetosVinculados)
+                .FirstOrDefault(x => x.Id == id);
         }
     }
 }
