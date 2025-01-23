@@ -1,3 +1,4 @@
+using ConstrutoraDesbravador.API.Configurations;
 using ConstrutoraDesbravador.Data.Context;
 using Microsoft.EntityFrameworkCore;
 
@@ -5,6 +6,8 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddDbContext<ConstrutoraDesbravadorContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
+
+builder.Services.ResolveDependencies();
 
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
