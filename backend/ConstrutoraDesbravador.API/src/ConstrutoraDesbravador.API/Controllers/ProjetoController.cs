@@ -2,7 +2,6 @@
 using ConstrutoraDesbravador.API.DTOs;
 using ConstrutoraDesbravador.Business.Interfaces;
 using ConstrutoraDesbravador.Business.Models;
-using ConstrutoraDesbravador.Business.Services;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
 
@@ -53,9 +52,10 @@ namespace ConstrutoraDesbravador.API.Controllers
         {
             if (!ModelState.IsValid) return CustomResponse(ModelState);
 
-            await _projetoService.Adicionar(_mapper.Map<Projeto>(projetoDTO));
+            var projeto = _mapper.Map<Projeto>(projetoDTO);
+            await _projetoService.Adicionar(projeto);
 
-            return CustomResponse(HttpStatusCode.Created, projetoDTO);
+            return CustomResponse(HttpStatusCode.Created, projeto);
         }
 
         [HttpPut("{id:int}")]
@@ -63,11 +63,10 @@ namespace ConstrutoraDesbravador.API.Controllers
         {            
             if (!ModelState.IsValid) return CustomResponse(ModelState);
 
-            projetoDTO.Id = id;
-            var produtoAtualizacao = _mapper.Map<Projeto>(projetoDTO);      
-            await _projetoService.Atualizar(produtoAtualizacao);
+            var projetoAtualizacao = _mapper.Map<Projeto>(projetoDTO);
+            await _projetoService.Atualizar(projetoAtualizacao);
 
-            return CustomResponse(HttpStatusCode.NoContent);
+            return CustomResponse(HttpStatusCode.OK, projetoAtualizacao);
         }
 
         [HttpDelete("{id:int}")]
