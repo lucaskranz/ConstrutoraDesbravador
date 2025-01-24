@@ -56,7 +56,7 @@ namespace ConstrutoraDesbravador.API.Controllers
             return CustomResponse(HttpStatusCode.Created, funcionariosAleatorios);
         }
 
-        [HttpDelete]
+        [HttpDelete("{id}")]
         public async Task<ActionResult> Excluir(int id)
         {
             await _funcionarioService.Remover(id);
