@@ -2,9 +2,10 @@ import React, { useEffect, useState } from 'react';
 import { faEye, faTrash } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Funcionario } from '../interfaces/Funcionario';
-import { getFuncionarios, inserirAleatorios } from '../services/funcionariosService';
+import { getFuncionarios, inserirAleatorios, excluirFuncionario } from '../services/funcionariosService';
 import { PaginacaoResult } from '../interfaces/PaginacaoResult';
 import FuncionarioModal from './Modal/FuncionarioModal';
+import axios from 'axios';
 
 const FuncionariosGrid: React.FC = () => {
     const [funcionarios, setFuncionarios] = useState<Funcionario[]>([]);
@@ -61,8 +62,16 @@ const FuncionariosGrid: React.FC = () => {
     const handleCloseModal = () => {
         setShowModal(false);         
         setSelectedFuncionario(null); 
-      };
+    };
 
+    const handleExcluirFuncionario = async (id: number) => {
+        const confirmacao = window.confirm('Tem certeza que deseja excluir este funcionário?');
+        if (confirmacao) {
+            await excluirFuncionario(id);    
+            setFuncionarios(funcionarios.filter(funcionario => funcionario.id !== id));
+        }
+    }
+     
     return (
         <div className="container mt-3">
             <h1>Funcionários</h1>
@@ -90,7 +99,7 @@ const FuncionariosGrid: React.FC = () => {
                             <button className="btn btn-info btn-sm me-2" onClick={() => handleVisualizarDetalhes(funcionario)}>
                                 <FontAwesomeIcon icon={faEye} />
                             </button>
-                            <button className="btn btn-danger btn-sm">
+                            <button className="btn btn-danger btn-sm" onClick={() => handleExcluirFuncionario(funcionario.id)}>
                                 <FontAwesomeIcon icon={faTrash} />
                             </button>
                         </td>
