@@ -21,9 +21,25 @@ namespace ConstrutoraDesbravador.API.Controllers
         }
 
         [HttpGet]
-        public async Task<IEnumerable<FuncionarioProjetosDTO>> ObterTodos()
+        public async Task<PaginacaoResult<FuncionarioProjetosDTO>> ObterTodos(int page = 1, int size = 10)
         {
-            return _mapper.Map<IEnumerable<FuncionarioProjetosDTO>>(await _funcionarioService.Obter());
+            var funcionarios = await _funcionarioService.Obter();
+
+            var total = funcionarios.Count();
+            var skip = (page - 1) * size;
+            var take = size;
+
+            funcionarios = funcionarios
+                .Skip(skip)
+                .Take(take);
+
+            return new PaginacaoResult<FuncionarioProjetosDTO>
+            {
+                Total = total,
+                Size = size,
+                Page = page,
+                Items = _mapper.Map<IEnumerable<FuncionarioProjetosDTO>>(funcionarios.ToList())
+            };
         }
 
         [HttpGet("{id}")]

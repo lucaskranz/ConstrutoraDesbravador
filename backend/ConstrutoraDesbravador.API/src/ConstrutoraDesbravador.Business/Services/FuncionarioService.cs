@@ -2,6 +2,7 @@
 using ConstrutoraDesbravador.Business.Interfaces;
 using ConstrutoraDesbravador.Business.Models;
 using ConstrutoraDesbravador.Business.Validations;
+using System.Runtime.Intrinsics.Arm;
 
 namespace ConstrutoraDesbravador.Business.Services
 {
@@ -29,7 +30,7 @@ namespace ConstrutoraDesbravador.Business.Services
                 await AdicionarAleatorios();
             }
 
-            return funcionarios;
+            return funcionarios;            
         }
 
         public async Task<Funcionario> ObterPorId(int id)
