@@ -1,34 +1,68 @@
 import React, { useEffect, useState } from 'react';
-import { fetchProjetos, excluirProjeto } from '../services/projetosService';
+import { fetchProjetos, excluirProjeto, atualizarProjeto, inserirProjeto } from '../services/projetosService';
 import { Projeto } from '../interfaces/Projeto';
 import { StatusProjetoEnumDescription } from '../enums/StatusProjetoEnum';
 import { RiscoProjetoEnumDescription } from '../enums/RiscoProjetoEnum';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEye, faTrash, faEdit, faUsers } from '@fortawesome/free-solid-svg-icons';
 import ProjetoModal from './Modal/ProjetoModal';
+import ProjetoInsertModal from './Modal/ProjetoInsertEditModal';
+import { ProjetoInsert } from '../interfaces/ProjetoInsert';
+import VincularFuncionarios from './Modal/VincularFuncionarios';
 
 const Projetos: React.FC = () => {
     const [projetos, setProjetos] = useState<Projeto[]>([]);
     const [loading, setLoading] = useState<boolean>(true);
     const [currentPage, setCurrentPage] = useState<number>(1);
     const [totalPages, setTotalPages] = useState<number>(0);
-    const [pageSize, setPageSize] = useState<number>(5); // Tamanho da página
+    const [pageSize, setPageSize] = useState<number>(10); 
     const [selectedProjeto, setSelectedProjeto] = useState<Projeto | null>(null);     
     const [showModal, setShowModal] = useState(false); 
+    const [showInsertModal, setShowInsertModal] = useState(false);
+    const [projetoEditando, setProjetoEditando] = useState<ProjetoInsert | null>(null);
+    const [showVincularModal, setShowVincularModal] = useState(false);
+    const [projetoSelecionado, setProjetoSelecionado] = useState<Projeto | null>(null);
+
+    const handleOpenInsertModal = () => {
+        setProjetoEditando(null); 
+        setShowInsertModal(true);
+    };
+
+    const handleOpenEditModal = (projeto: ProjetoInsert) => {
+        setProjetoEditando(projeto); 
+        setShowInsertModal(true);
+    };
+
+    const handleSaveProjeto = async (projeto: ProjetoInsert) => {
+        if (projeto.id === 0) {
+
+            const payload = {                
+                ...projeto,
+                statusProjeto: parseInt(projeto.statusProjeto.toString()),
+                riscoProjeto: parseInt(projeto.riscoProjeto.toString()),           
+            };
+
+            const data = await inserirProjeto(payload); // Função do service
+            getProjetos();
+        } else {
+            const data = await atualizarProjeto(projeto.id, projeto); // Função do service
+            getProjetos();
+        }
+        setShowInsertModal(false); 
+    };
+    const getProjetos = async () => {
+        try {
+            const data = await fetchProjetos(currentPage, pageSize);
+            setProjetos(data.items); 
+            setTotalPages(data.totalPages); 
+        } catch (error) {
+            console.error('Erro ao carregar projetos:', error);
+        } finally {
+            setLoading(false);
+        }
+    };
     
     useEffect(() => {
-        const getProjetos = async () => {
-            try {
-                const data = await fetchProjetos(currentPage, pageSize);
-                setProjetos(data.items); // Ajuste com base na resposta da API (campo 'items')
-                setTotalPages(data.totalPages); // Ajuste com base na resposta da API (campo 'totalPages')
-            } catch (error) {
-                console.error('Erro ao carregar projetos:', error);
-            } finally {
-                setLoading(false);
-            }
-        };
-
         getProjetos();
     }, [currentPage, pageSize]);
 
@@ -37,8 +71,8 @@ const Projetos: React.FC = () => {
     };
 
     const handleVisualizarDetalhes = (projeto: Projeto) => {
-        setSelectedProjeto(projeto); // Armazena o funcionário selecionado
-        const modal = new (window as any).bootstrap.Modal(document.getElementById('modalDetalhes')!); // Inicializa o modal
+        setSelectedProjeto(projeto); 
+        const modal = new (window as any).bootstrap.Modal(document.getElementById('modalDetalhes')!); 
         modal.show();        
         setShowModal(true); 
     };
@@ -56,17 +90,37 @@ const Projetos: React.FC = () => {
         }
     }
 
-    const handleVincularFuncionarios = (projeto: Projeto) => {
+    const handleCloseModalInsert = () => {
+        setShowInsertModal(false)
+        setProjetoEditando(null);
         
     };
 
-    const handleEditar = (projeto: Projeto) => {
-        
+    const handleVincularFuncionarios = (projeto: Projeto) => {
+        setProjetoSelecionado(projeto);
+        setShowVincularModal(true);
     };
 
     return (
         <div className="container mt-5">
             <h1>Projetos</h1>
+            <button className="btn btn-dark mb-4" onClick={handleOpenInsertModal}>
+                Inserir
+            </button>
+            <ProjetoInsertModal
+                showModal={showInsertModal}
+                onClose={handleCloseModalInsert}
+                onSave={handleSaveProjeto}
+                projeto={projetoEditando}
+            />
+
+            <VincularFuncionarios
+                projetoId={projetoSelecionado?.id || 0}
+                showModal={showVincularModal}
+                onClose={() => setShowVincularModal(false)}
+                onFuncionariosVinculados={getProjetos}
+            />
+
             {loading ? (
                 <p>Carregando...</p>
             ) : (
@@ -95,8 +149,16 @@ const Projetos: React.FC = () => {
                                             title="Vincular Funcionários">
                                             <FontAwesomeIcon icon={faUsers} />
                                         </button>
-                                        <button className="btn btn-dark btn-sm me-2" onClick={() => handleEditar(projeto)}
-                                            title="Editar Funcionário">
+                                        <button className="btn btn-dark btn-sm me-2" title="Editar Funcionário"
+                                            onClick={() => handleOpenEditModal({id: projeto.id,
+                                                nome: projeto.nome,
+                                                descricao: projeto.descricao,
+                                                dataInicio: projeto.dataInicio,
+                                                dataTermino: projeto.dataTermino,
+                                                statusProjeto: projeto.statusProjeto,
+                                                riscoProjeto: projeto.riscoProjeto,
+                                                responsavelId: projeto.responsavel.id
+                                            })}>
                                             <FontAwesomeIcon icon={faEdit} />
                                         </button>
                                         <button className="btn btn-danger btn-sm" onClick={() => handleExcluirProjeto(projeto.id)}

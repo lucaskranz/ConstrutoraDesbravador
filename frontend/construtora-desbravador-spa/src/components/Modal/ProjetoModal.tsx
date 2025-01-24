@@ -19,6 +19,7 @@ const ProjetoModal: React.FC<ProjetoModalProps> = ({ projeto, showModal, onClose
                 <div className="modal-body">
                     {projeto ? (
                     <div>
+                        <h5>{projeto.nome}</h5>
                         <p>{projeto.descricao}</p>
                         <h6><strong>Responsável: </strong>{`${projeto.responsavel.nome} ${projeto.responsavel.sobrenome}`}</h6>
                         <h6><strong>Data Início:</strong> {new Date(projeto.dataInicio).toLocaleDateString("pt-BR")}</h6>

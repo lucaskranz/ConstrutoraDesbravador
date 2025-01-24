@@ -1,7 +1,7 @@
 export enum RiscoProjetoEnum{
-    Baixo,
-    Medio,
-    Alto
+    Baixo = 0,
+    Medio = 1,
+    Alto = 2
 }
 
 export const RiscoProjetoEnumDescription = {
