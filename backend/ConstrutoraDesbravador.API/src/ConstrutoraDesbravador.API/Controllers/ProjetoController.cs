@@ -73,10 +73,10 @@ namespace ConstrutoraDesbravador.API.Controllers
         [HttpDelete("{id:int}")]
         public async Task<ActionResult<ProjetoSemResponsavelDTO>> Excluir(int id)
         {
-            var produto = await _projetoService.ObterPorId(id);
-            if (produto == null) return NotFound();
+            var projeto = await _projetoService.ObterPorId(id);
+            if (projeto == null) return NotFound();
 
-            await _projetoService.Remover(produto);
+            await _projetoService.Remover(projeto);
 
             return CustomResponse(HttpStatusCode.NoContent);
         }

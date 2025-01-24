@@ -1,5 +1,6 @@
 import { RiscoProjetoEnum } from "../enums/RiscoProjetoEnum";
 import { StatusProjetoEnum } from "../enums/StatusProjetoEnum";
+import { Funcionario } from "./Funcionario";
 
 export interface Projeto {
     id: number;
@@ -9,5 +10,6 @@ export interface Projeto {
     dataTermino: Date;
     statusProjeto: StatusProjetoEnum;
     riscoProjeto: RiscoProjetoEnum;
-    responsavelId: number;
+    responsavel: Funcionario;
+    funcionarios: Funcionario[]
 }

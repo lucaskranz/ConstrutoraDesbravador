@@ -3,3 +3,9 @@ export enum RiscoProjetoEnum{
     Medio,
     Alto
 }
+
+export const RiscoProjetoEnumDescription = {
+    [RiscoProjetoEnum.Baixo]: "Baixo",
+    [RiscoProjetoEnum.Medio]: "Médio",
+    [RiscoProjetoEnum.Alto]: "Alto",
+};
