@@ -1,4 +1,4 @@
-# TesteDesbravador
+# Desbravador
 O aplicativo de cadastro de projetos para uma construtora, foi desenvolvido com .NET 8 e React.js, com um banco de dados local Postgres.
 ## Usabilidade
 Foi desenvolvido um SPA simples, com um menu superior, podendo ser navegável entre as telas de Projetos e Funcionários.
