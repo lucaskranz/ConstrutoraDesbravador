@@ -34,18 +34,18 @@ const Projetos: React.FC = () => {
     };
 
     const handleSaveProjeto = async (projeto: ProjetoInsert) => {
-        if (projeto.id === 0) {
+        const payload = {                
+            ...projeto,
+            statusProjeto: parseInt(projeto.statusProjeto.toString()),
+            riscoProjeto: parseInt(projeto.riscoProjeto.toString()),           
+        };
 
-            const payload = {                
-                ...projeto,
-                statusProjeto: parseInt(projeto.statusProjeto.toString()),
-                riscoProjeto: parseInt(projeto.riscoProjeto.toString()),           
-            };
-
-            const data = await inserirProjeto(payload); // Função do service
+        if (projeto.id === 0) {           
+            const data = await inserirProjeto(payload); 
+            
             getProjetos();
         } else {
-            const data = await atualizarProjeto(projeto.id, projeto); // Função do service
+            const data = await atualizarProjeto(projeto.id, payload);
             getProjetos();
         }
         setShowInsertModal(false); 

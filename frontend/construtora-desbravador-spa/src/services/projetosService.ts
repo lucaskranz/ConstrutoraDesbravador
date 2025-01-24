@@ -28,8 +28,14 @@ export const excluirProjeto = async (id: number) => {
 };
 
 export const atualizarProjeto = async (id: number, projeto: ProjetoInsert) => {
-    const response = await axios.put(`${API_URL}/projetos/${id}`, projeto);
-    return response.data;
+    try {
+        const response = await axios.put(`${API_URL}/projetos/${id}`, projeto);
+        return response.data;
+    } catch (error) {
+        alert(`Erro ao atualizar projeto - ${(error as any).response.data.errors[0]}`);
+        throw error;
+    }
+    
 };
 
 export const inserirProjeto = async (projeto: ProjetoInsert): Promise<Projeto> => {
@@ -37,7 +43,7 @@ export const inserirProjeto = async (projeto: ProjetoInsert): Promise<Projeto> =
         const response = await axios.post(`${API_URL}/projetos`, projeto);
         return response.data;
     } catch (error) {
-        console.error('Erro ao inserir projeto:', error);
+        alert(`Erro ao inserir projeto - ${(error as any).response.data.errors[0]}`);
         throw error;
     }
 };
@@ -49,7 +55,6 @@ export const vincularFuncionarios = async (projetoId: number, idsFuncionarios: s
         });
         alert('Funcionários vinculados com sucesso!');
     } catch (error) {
-        console.error('Erro ao vincular funcionários:', error);
         alert('Erro ao vincular funcionários.');
     }
 };

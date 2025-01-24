@@ -33,9 +33,8 @@ const ProjetoInsertModal: React.FC<ProjetoInsertModalProps> = ({ showModal, onCl
         if (projeto) {
             setProjetoState(projeto);
         }
-        if(showModal){
-            fetchFuncionarios();
-        }
+        fetchFuncionarios();
+        
     }, [projeto]);
     
     const fetchFuncionarios = async () => {
