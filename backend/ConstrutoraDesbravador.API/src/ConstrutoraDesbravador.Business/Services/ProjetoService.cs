@@ -58,7 +58,7 @@ namespace ConstrutoraDesbravador.Business.Services
             return await _projetoRepository.ObterProjetoResponsavelFuncionarios(id);
         }
 
-        private bool PodeExcluir(StatusProjetoEnum status)
+        public bool PodeExcluir(StatusProjetoEnum status)
         {
             var statusProibidos = new[]
             {
@@ -72,11 +72,18 @@ namespace ConstrutoraDesbravador.Business.Services
 
         public async Task VincularFuncionarios(int idProjeto, string idsFuncionarios)
         {
-            var funcionariosIds = idsFuncionarios.Split(',').Select(id => int.TryParse(id, out var numero) ? numero : (int?)null);
-            var funcionarios = await _funcionarioRepository.Buscar(x => funcionariosIds.Contains(x.Id) 
-                                                                     && !x.ProjetosVinculados.Any(c => c.Id == idProjeto));
-
-            await _projetoRepository.VincularFuncionarios(idProjeto, funcionarios.ToList());
+            try
+            {
+                var funcionariosIds = idsFuncionarios.Split(',').Select(id => int.TryParse(id, out var numero) ? numero : (int?)null);
+                var funcionarios = await _funcionarioRepository.Buscar(x => funcionariosIds.Contains(x.Id)
+                                                                         && !x.ProjetosVinculados.Any(c => c.Id == idProjeto));
+                await _projetoRepository.VincularFuncionarios(idProjeto, funcionarios.ToList());
+            }
+            catch
+            {
+                Notificar("Erro ao vincular Funcionários.");
+                throw;
+            }
         }
     }
 }

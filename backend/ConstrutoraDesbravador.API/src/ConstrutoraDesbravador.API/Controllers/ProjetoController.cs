@@ -83,6 +83,11 @@ namespace ConstrutoraDesbravador.API.Controllers
         [HttpPost("{id}/vincular-funcionarios")]
         public async Task<ActionResult> VincularFuncionarios(int id, string idsFuncionarios)
         {
+            if (string.IsNullOrEmpty(idsFuncionarios))
+            {
+                return BadRequest("É obrigatório selecionar funcionários para vincular.");
+            }
+
             await _projetoService.VincularFuncionarios(id, idsFuncionarios);
 
             return CustomResponse(HttpStatusCode.Created);

@@ -9,6 +9,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConstrutoraDesbravador.Busi
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConstrutoraDesbravador.Data", "src\ConstrutoraDesbravador.Data\ConstrutoraDesbravador.Data.csproj", "{CC3C3E68-E0EE-471C-A2C2-742373FD8BA2}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConstrutoraDesbravador.Tests", "tst\ConstrutoraDesbravador.Tests\ConstrutoraDesbravador.Tests.csproj", "{40C3468E-0D1E-419C-A52F-2ED7224ECBD5}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +29,10 @@ Global
 		{CC3C3E68-E0EE-471C-A2C2-742373FD8BA2}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CC3C3E68-E0EE-471C-A2C2-742373FD8BA2}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CC3C3E68-E0EE-471C-A2C2-742373FD8BA2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{40C3468E-0D1E-419C-A52F-2ED7224ECBD5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{40C3468E-0D1E-419C-A52F-2ED7224ECBD5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{40C3468E-0D1E-419C-A52F-2ED7224ECBD5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{40C3468E-0D1E-419C-A52F-2ED7224ECBD5}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
