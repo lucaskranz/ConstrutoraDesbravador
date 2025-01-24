@@ -7,5 +7,6 @@ namespace ConstrutoraDesbravador.Business.Interfaces
         Task<IEnumerable<Funcionario>> ObterFuncionariosProjetos();
         Task<Funcionario> ObterFuncionarioProjeto(int id);
         bool ExisteEmail(string email);
+        Task RemoverProjetoFuncionario(int id);
     }
 }

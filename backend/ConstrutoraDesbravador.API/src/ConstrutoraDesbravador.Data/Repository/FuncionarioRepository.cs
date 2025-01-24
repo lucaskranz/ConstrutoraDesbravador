@@ -36,5 +36,17 @@ namespace ConstrutoraDesbravador.Data.Repository
                 .Include(x => x.ProjetosVinculados)
                 .FirstOrDefault(x => x.Id == id);
         }
+
+        public async Task RemoverProjetoFuncionario(int id)
+        {            
+            var projetoFuncionarios = Db.ProjetoFuncionarios.Where(x => x.FuncionarioId == id).ToList();
+            if (projetoFuncionarios.Any())
+            {
+                Db.ProjetoFuncionarios.RemoveRange(projetoFuncionarios);
+                Db.SaveChanges();            
+            }
+
+            await Remover(id);
+        }
     }
 }

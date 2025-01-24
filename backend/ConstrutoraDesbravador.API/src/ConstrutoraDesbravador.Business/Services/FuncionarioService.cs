@@ -68,13 +68,7 @@ namespace ConstrutoraDesbravador.Business.Services
                 return;
             }
 
-            if (funcionario.ProjetosVinculados.Any())
-            {
-                Notificar("Funcionário está vinculado a projetos");
-                return;
-            }
-
-            await _funcionarioRepository.Remover(id);
+            await _funcionarioRepository.RemoverProjetoFuncionario(id);
         }
 
         public void Dispose()

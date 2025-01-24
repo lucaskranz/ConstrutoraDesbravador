@@ -36,6 +36,18 @@ namespace ConstrutoraDesbravador.Data.Repository
             return await projetos.ToListAsync();
         }
 
+        public async Task RemoverProjetoFuncionario(int id)
+        {
+            var projetoFuncionarios = Db.ProjetoFuncionarios.Where(x => x.ProjetoId == id).ToList();
+            if(projetoFuncionarios.Any())
+            {
+                Db.ProjetoFuncionarios.RemoveRange(projetoFuncionarios);
+                Db.SaveChanges();
+            }
+
+            await Remover(id);
+        }
+
         public async Task VincularFuncionarios(int idProjeto, List<Funcionario> funcionarios)
         {
             var projetoFuncionarios = new List<ProjetoFuncionario>();

@@ -8,5 +8,6 @@ namespace ConstrutoraDesbravador.Business.Interfaces
         Task<Projeto> ObterProjetoResponsavelFuncionarios(int id);
         bool ExisteNomeProjeto(string nome);
         Task VincularFuncionarios(int idProjeto, List<Funcionario> funcionarios);
+        Task RemoverProjetoFuncionario(int id);
     }
 }

@@ -45,7 +45,7 @@ namespace ConstrutoraDesbravador.Business.Services
                 return;
             }
 
-            await _projetoRepository.Remover(projeto.Id);
+            await _projetoRepository.RemoverProjetoFuncionario(projeto.Id);
         }
 
         public void Dispose()
